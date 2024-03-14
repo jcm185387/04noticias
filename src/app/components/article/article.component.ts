@@ -4,6 +4,8 @@ import { Article } from 'src/app/interfaces';
 
 //plugins capacitor
 import { Browser } from '@capacitor/browser';
+import { Share } from '@capacitor/share';
+
 /*
 const openCapacitorSite = async () => {
   await Browser.open({ url: 'http://capacitorjs.com/' });
@@ -72,9 +74,17 @@ export class ArticleComponent  implements OnInit {
     await actionSheet.present();
   }
   
-  onShareArticle(){
+  async onShareArticle(){
 
+    await Share.share({
+      title: 'Hola, esto podría interesarte mucho',
+      text: this.article.title,
+      url: this.article.url,
+      dialogTitle: 'Comparte con tus amigos',
+    });
   }
+
+
 
   onToggleFavorite(){
 
