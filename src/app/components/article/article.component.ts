@@ -5,6 +5,7 @@ import { Article } from 'src/app/interfaces';
 //plugins capacitor
 import { Browser } from '@capacitor/browser';
 import { Share } from '@capacitor/share';
+import { StorageService } from 'src/app/services/storage.service';
 
 /*
 const openCapacitorSite = async () => {
@@ -20,7 +21,8 @@ const openCapacitorSite = async () => {
 export class ArticleComponent  implements OnInit {
 
   constructor( private platform: Platform,
-               private actionSheetCtrl: ActionSheetController ) { }
+               private actionSheetCtrl: ActionSheetController, 
+               private storageService: StorageService               ) { }
 
   @Input() article = {} as Article;
   @Input() index = {} as number; 
@@ -39,6 +41,8 @@ export class ArticleComponent  implements OnInit {
   }
 
   async onOpenMenu(){
+    const articleinFavourite = this.storageService.articleInFavourites(this.article);
+
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Actions',
       buttons: [
@@ -51,10 +55,10 @@ export class ArticleComponent  implements OnInit {
           },*/
         },
         {
-          text: 'Favorito',
-          icon: 'heart-outline',
-          handler: () => this.onToggleFavorite()
-          
+          text: articleinFavourite ? 'Remover de favorito' :  'Añadir a Favoritos',
+          icon: articleinFavourite ? 'heart' :  'heart-outline',              
+          handler: () => this.onToggleFavorite(),
+          cssClass: articleinFavourite ? 'favorito' :  '',        
           /*data: {
             action: 'share',
           },*/
@@ -87,7 +91,8 @@ export class ArticleComponent  implements OnInit {
 
 
   onToggleFavorite(){
-
+    this.storageService.saveRemoveArticle(this.article);
+    console.log("guardando favorito");
   }
   
   
