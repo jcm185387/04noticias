@@ -17,7 +17,9 @@ export class Tab1Page implements OnInit {
       this.newService.getTopHeadLines()
       .subscribe(
         articles => this.articles.push(...articles)
+
       );
+      //console.log(this.articles);
   }
 
   loadData(){

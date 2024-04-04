@@ -6,6 +6,8 @@ import { Article, NewsResponse } from '../interfaces';
 import { map } from 'rxjs/operators';
 import { ArticlesByCategoryAndPage } from '../interfaces/index';
 
+import { storedArticlesByCategory } from '../data/mock-news';
+
 const apikey = environment.apikey;
 const apiUrl = environment.apiUrl;
 
@@ -14,8 +16,12 @@ const apiUrl = environment.apiUrl;
 })
 export class NewsService {
 
-  private articlesByCategoryAndPage: ArticlesByCategoryAndPage = {};
-  constructor(private http: HttpClient) { }
+  // private articlesByCategoryAndPage: ArticlesByCategoryAndPage = {};
+  private articlesByCategoryAndPage: ArticlesByCategoryAndPage = storedArticlesByCategory;
+  constructor(private http: HttpClient) {
+
+    //console.log(this.articlesByCategoryAndPage);
+   }
 
   private executeQuery<T>( endpoint: string ){
     console.log('Petición HTTP Realizada');
@@ -29,6 +35,7 @@ export class NewsService {
   
 
   getTopHeadLines(): Observable<Article[]> {
+    //console.log("business",this.getTopHeadlinesByCategory('business'));
     return this.getTopHeadlinesByCategory('business');
     // return this.executeQuery<NewsResponse>(`/top-headlines?category=business`)
     //   .pipe(
@@ -38,6 +45,8 @@ export class NewsService {
   }
 
   getTopHeadlinesByCategory( category: string, loadMore: boolean = false ):Observable<Article[]> {
+    //console.log(of(this.articlesByCategoryAndPage[category].articles));
+    return of(this.articlesByCategoryAndPage[category].articles);
 
     if ( loadMore ) {
       return this.getArticlesByCategory( category );
